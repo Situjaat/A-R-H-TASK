@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #Main{
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+
+
+        }
+        nav ul{
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-evenly;
+            background-color: blue;
+            border-radius: 5px;
+        }
+        li{
+            margin: 20px;
+            font-weight: bolder;
+            color: white;
+        }
+        li:hover{
+            cursor: pointer;
+            color: #84a1c7;
+        }
+        #form_div{
+            width: 50%; 
+            border: 1px solid black;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+            background-color: #99aeca;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        #form_div input{
+            width: 80%;
+            height: 30px;
+            border-radius: 5px;
+        }
+        label{
+            font-weight: bold;
+            font-size: larger;
+        }
+        #btn{
+            margin-top: 20px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: green;
+            font-size: larger;
+            font-weight: bolder;
+        }
+        #btn:hover{
+            cursor: pointer;
+        }
+
+        #table_div{
+            width: 80%;
+            /* border: 1px solid rgb(21, 21, 23); */
+            margin-top: 30px;
+            border-radius: 5px;
+            height: auto;
+        }
+        table{
+            border-collapse: collapse;
+            width: 100%;
+            
+            
+        }
+        th,tr,td{
+            border: 1px solid black;
+            height: 40px;
+            text-align: center;
+             
+        }
+     th{
+        background-color: #6399e0;
+
+     }
+    
+     tr:nth-child(odd){
+        background-color: #8765e4;
+     }
+     tr:nth-child(even){
+        background-color: #66c9d4;
+     }
+     #accept_button{
+        text-align: center;
+        padding: 5px;
+        margin-top: 8px;
+        background-color: green;
+        font-weight: bolder;
+        border-radius: 5px;
+        cursor: pointer;
+     }
+     #reject_button{
+        text-align: center;
+        padding: 5px;
+        margin-top: 8px;
+        background-color: red;
+        font-weight: bolder;
+        border-radius: 5px;
+        margin-left: 10px;
+
+     }
+    </style>
+</head>
+<body>
+    
+        <nav>
+            <ul>
+                <li>Accepted</li>
+                <li>Rejected</li>
+                <li>Hold</li>
+            </ul>
+        </nav>
+        <div id="Main">
+        <div id="form_div">
+            <form id="form">
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name"><br>  
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email"><br>
+                <button id="btn"> Submit</button>
+            </form>
+        </div>
+        <div id="table_div">
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    let arr=JSON.parse(localStorage.getItem("user")) || [];
+    let form=document.getElementById("form")
+    let tbody=document.getElementById("tbody")
+    let btn=document.getElementById("btn")
+    btn.addEventListener("click",userdetails)
+    function userdetails(e){
+        e.preventDefault()
+        let obj={
+            name:document.getElementById("name").value,
+            email:document.getElementById("email").value
+        }
+        arr.push(obj)
+        form.reset()
+        localStorage.setItem("user",JSON.stringify(arr))
+        displaydata(arr)
+    }
+
+    function displaydata(situ) {
+        tbody.innerText=""
+        situ.map((ele,index)=>{
+            let row=document.createElement("tr")
+            let td=document.createElement("td")
+            td.innerText=index+1
+            let td1=document.createElement("td")
+            td1.innerText=ele.name
+            let td2=document.createElement("td")
+            td2.innerText=ele.email
+            let td3=document.createElement("button")
+            td3.innerText="Accept"
+            td3.id="accept_button"
+            td3.addEventListener("click",()=>{
+                 addtocart ("cart",ele)
+            });
+
+
+            let td4=document.createElement("button")
+            td4.innerText="Reject"
+            td4.id="reject_button"
+            td4.addEventListener("click",()=>{
+                deldata(arr,index)
+                displaydata(arr)
+            });
+                
+            row.append(td,td1,td2,td3,td4)
+            tbody.append(row)
+
+
+        })
+        
+    }
+    displaydata(arr)
+
+    function addtocart(key,value){
+        let cart=JSON.parse(localStorage.getItem("cart")) || [];
+        cart.push(value)
+        localStorage.setItem("cart",JSON.stringify(value))
+    }
+
+
+    function deldata (key,index){
+        let cart=JSON.parse(localStorage.getItem("key")) || [];
+        key.splice(index,1)
+        localStorage.setItem("key",JSON.stringify(arr))
+    }
+</script>
+
+</html>
